@@ -239,7 +239,10 @@ install_x-ui() {
     fi
 
     if [[ -e /usr/local/x-ui/ ]]; then
-        systemctl stop x-ui
+        # Останавливаем x-ui, если он уже запущен
+        if pgrep -x "x-ui" > /dev/null; then
+            pkill -x "x-ui"
+        fi
         rm /usr/local/x-ui/ -rf
     fi
 
@@ -261,9 +264,8 @@ install_x-ui() {
     chmod +x /usr/bin/x-ui
     config_after_install
 
-    systemctl daemon-reload
-    systemctl enable x-ui
-    systemctl start x-ui
+    # Запускаем x-ui вручную
+    /usr/local/x-ui/x-ui &
     echo -e "${green}x-ui ${tag_version}${plain} installation finished, it is running now..."
     echo -e ""
     echo -e "┌───────────────────────────────────────────────────────┐
