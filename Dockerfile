@@ -31,7 +31,8 @@ RUN apk add --no-cache --update \
   fail2ban \
   bash \
   curl \
-  openrc
+  openrc \
+  wget
 
 COPY --from=builder /app/build/ /app/
 COPY --from=builder /app/DockerEntrypoint.sh /app/
