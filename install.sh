@@ -24,6 +24,32 @@ else
 fi
 echo "The OS release is: $release"
 
+start_xui() {
+    if pgrep -x "x-ui" > /dev/null; then
+        echo -e "x-ui is already running."
+    else
+        /usr/local/x-ui/x-ui &
+        echo -e "x-ui started."
+    fi
+}
+
+# Функция для остановки x-ui
+stop_xui() {
+    if pgrep -x "x-ui" > /dev/null; then
+        pkill -x "x-ui"
+        echo -e "x-ui stopped."
+    else
+        echo -e "x-ui is not running."
+    fi
+}
+
+# Функция для перезапуска x-ui
+restart_xui() {
+    stop_xui
+    start_xui
+    echo -e "x-ui restarted."
+}
+
 arch() {
     case "$(uname -m)" in
     x86_64 | x64 | amd64) echo 'amd64' ;;
@@ -240,9 +266,7 @@ install_x-ui() {
 
     if [[ -e /usr/local/x-ui/ ]]; then
         # Останавливаем x-ui, если он уже запущен
-        if pgrep -x "x-ui" > /dev/null; then
-            pkill -x "x-ui"
-        fi
+        stop_xui
         rm /usr/local/x-ui/ -rf
     fi
 
@@ -265,7 +289,7 @@ install_x-ui() {
     config_after_install
 
     # Запускаем x-ui вручную
-    /usr/local/x-ui/x-ui &
+    start_xui
     echo -e "${green}x-ui ${tag_version}${plain} installation finished, it is running now..."
     echo -e ""
     echo -e "┌───────────────────────────────────────────────────────┐
