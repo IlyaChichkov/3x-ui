@@ -1,7 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-# Start fail2ban
-[ $X_UI_ENABLE_FAIL2BAN == "true" ] && fail2ban-client -x start
+AUTOSTART_FILE="/app/x-ui/autostart"
 
-# Run x-ui
-exec /app/x-ui
+if [[ -f "$AUTOSTART_FILE" && $(cat "$AUTOSTART_FILE") == "1" ]]; then
+    echo "Autostart is enabled. Starting /app/x-ui/x-ui..."
+    /app/x-ui/x-ui
+else
+    echo "Autostart is disabled. Skipping /app/x-ui/x-ui startup."
+fi

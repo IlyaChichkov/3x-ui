@@ -9,6 +9,7 @@ services:
     environment:
       XRAY_VMESS_AEAD_FORCED: "false"
       X_UI_ENABLE_FAIL2BAN: "true"
+      X_UI_PORT: 60
     tty: true
     network_mode: host
     restart: unless-stopped
